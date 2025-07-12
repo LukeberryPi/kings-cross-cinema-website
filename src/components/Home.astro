@@ -1,4 +1,29 @@
-<div>
-    <h1>2025 King's Cross Cinema Schedule</h1>
-    <p>Movies everyday form June 30th to August 17th</p>
+---
+import { movies } from "../data/movies.js";
+import { format } from "date-fns";
+
+const allDates = Object.keys(movies)
+    .map((date) => new Date(date))
+    .sort((a, b) => a - b)
+    .map((date) => format(date, "yyyy-MM-dd"));
+const allTimes = ["12:00", "14:30", "17:00", "19:30"];
+---
+
+<div class="flex items-center gap-4">
+    <label for="date-select">Select a Date:</label>
+    <select name="date" id="date-select" class="ring">
+        <option value="any-date">Any Date</option>
+        {
+            allDates.map((date) => (
+                <option value={date}>{format(date, "dd/MM (EEEE)")}</option>
+            ))
+        }
+    </select>
+</div>
+<div class="flex items-center gap-4">
+    <label for="date-select">Select a time:</label>
+    <select name="date" id="date-select" class="ring">
+        <option value="any-date">Any Time</option>
+        {allTimes.map((time) => <option value={time}>{time}</option>)}
+    </select>
 </div>

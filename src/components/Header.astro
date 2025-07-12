@@ -3,16 +3,13 @@ import { Image } from 'astro:assets';
 ---
 
 <header class="bg-inherit">
-    <nav class="bg-inherit fixed top-6 ring ring-cyan-950 flex items-center inset-x-6 py-4 px-8 justify-between">
+    <nav>
         <a href="/" class="flex items-center gap-2">
-            <Image src="/movie-camera.png" width="50" height="50" alt="Movie Camera Icon" />
-            <span class="font-bold text-3xl">2025 King's Cross Cinema Schedule</span>
+            <Image src="/movie-camera.png" width="80" height="80" alt="Movie Camera Icon" />
+            <div class="flex flex-col">
+                <span class="font-bold text-2xl">King's Cross Cinema Schedule</span>
+                <span class="text-xl">2025 Everyman on the Canal</span>
+            </div>
         </a>
-        <ul class="flex gap-x-8">
-            <li><a href="/whats-on">What's On</a></li>
-            <li><a href="#">What's On</a></li>
-            <li><a href="#">What's On</a></li>
-            <li><a href="#">What's On</a></li>
-        </ul>
     </nav>
 </header>
