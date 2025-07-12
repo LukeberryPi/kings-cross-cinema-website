@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Wrapper from "../components/Wrapper.astro";
 ---
 
 <!doctype html>
@@ -16,6 +17,8 @@ import "../styles/global.css";
         />
     </head>
     <body>
-        <slot />
+        <Wrapper>
+            <slot />
+        </Wrapper>
     </body>
 </html>
