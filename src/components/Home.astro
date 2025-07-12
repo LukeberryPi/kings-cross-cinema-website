@@ -2,28 +2,102 @@
 import { movies } from "../data/movies.js";
 import { format } from "date-fns";
 
-const allDates = Object.keys(movies)
-    .map((date) => new Date(date))
-    .sort((a, b) => a - b)
-    .map((date) => format(date, "yyyy-MM-dd"));
+const today = new Date();
+const startDate = new Date("2023-06-30");
+const endDate = new Date("2023-08-17");
+
+const allDates = Object.keys(movies).map((date) => new Date(date));
 const allTimes = ["12:00", "14:30", "17:00", "19:30"];
+
+const isValidDate = (date: Date) => {
+    return date >= startDate && date <= endDate;
+};
 ---
 
-<div class="flex items-center gap-4">
-    <label for="date-select">Select a Date:</label>
-    <select name="date" id="date-select" class="ring">
-        <option value="any-date">Any Date</option>
-        {
-            allDates.map((date) => (
-                <option value={date}>{format(date, "dd/MM (EEEE)")}</option>
-            ))
-        }
-    </select>
+<div class="flex flex-col gap-4 items-center">
+    <h1 class="text-2xl uppercase">
+        Free movies every day from {format(startDate, "dd MMMM")} to {
+            format(endDate, "dd MMMM")
+        }.
+    </h1>
+    <span class="gap-4 items-center flex">
+        <span class="inline-flex items-center gap-1"
+            ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-map-pin"
+                ><path
+                    d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                ></path><circle cx="12" cy="10" r="3"></circle></svg
+            >Granary Square, London N1C 4PW</span
+        >
+        <a
+            href="https://maps.app.goo.gl/sF3GFctzqArD3nSy7"
+            target="_blank"
+            class="underline underline-offset-4 text-blue-500 inline-flex items-center"
+            >Open in Google Maps<svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-arrow-up-right"
+                ><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg
+            ></a
+        >
+    </span>
 </div>
-<div class="flex items-center gap-4">
-    <label for="date-select">Select a time:</label>
-    <select name="date" id="date-select" class="ring">
-        <option value="any-date">Any Time</option>
-        {allTimes.map((time) => <option value={time}>{time}</option>)}
-    </select>
-</div>
+<form class="flex flex-col gap-4" name="movie-form">
+    <label class="font-bold text-xl"
+        >Filter the movies by date or time (or both)</label
+    >
+    <div class="flex items-center gap-4">
+        <label for="date-select">Pick a date:</label>
+        <select
+            name="date"
+            id="date-select"
+            class="ring grow rounded p-1"
+            default-value={today.toString()}
+        >
+            <optgroup label="Quick select">
+                <option value="all-dates">All Available Dates</option>
+                <option value="today">Today</option>
+                <option value="tomorrow">Tomorrow</option>
+            </optgroup>
+            <hr />
+            <optgroup label="Every date">
+                {
+                    allDates.map((date) => {
+                        return (
+                            <option value={date.toString()}>
+                                {format(date, "dd/MM EE")}
+                            </option>
+                        );
+                    })
+                }
+            </optgroup>
+        </select>
+    </div>
+    <div class="flex items-center gap-4">
+        <label for="date-select">Pick a time:</label>
+        <select name="date" id="date-select" class="ring grow rounded p-1">
+            <option value="any-date">All Available Hours</option>
+            {allTimes.map((time) => <option value={time}>{time}</option>)}
+        </select>
+    </div>
+    <button
+        class="rounded bg-black text-amber-50 p-2 hover:opacity-50 transition-all"
+        >Filter Movies</button
+    >
+</form>
