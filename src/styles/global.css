@@ -12,4 +12,5 @@ html {
 body {
     height: 100%;
     background-color: var(--color-orange-100);
+    color: var(--color-orange-950)
 }
