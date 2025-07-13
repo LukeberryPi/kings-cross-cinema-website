@@ -56,7 +56,7 @@ const endDate = new Date("2023-08-17");
     </div>
     <button
         id="toggle-past-movies"
-        class="bg-stone-900 text-stone-50 px-4 py-2 rounded hover:bg-stone-800 transition-all"
+        class="bg-stone-900 text-stone-50 px-4 py-2 rounded hover:bg-stone-700 transition-all"
         data-showing="false"
         aria-expanded="false"
         aria-controls="movies-container"
@@ -93,22 +93,36 @@ const endDate = new Date("2023-08-17");
                                 </time>
                             </h2>
                             {!!alreadyHappened && (
-                                <span class=" bg-red-500 text-stone-100 px-2.5 py-px rounded-full max-sm:text-sm" role="status" aria-label="This event has already happened">
+                                <span
+                                    class=" bg-red-500 text-stone-100 px-2.5 py-px rounded-full max-sm:text-sm"
+                                    role="status"
+                                    aria-label="This event has already happened"
+                                >
                                     Already happened
                                 </span>
                             )}
                             {!!isToday && (
-                                <span class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm" role="status" aria-label="This event is today">
+                                <span
+                                    class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm"
+                                    role="status"
+                                    aria-label="This event is today"
+                                >
                                     Today
                                 </span>
                             )}
                             {!!isTomorrow && (
-                                <span class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm" role="status" aria-label="This event is tomorrow">
+                                <span
+                                    class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm"
+                                    role="status"
+                                    aria-label="This event is tomorrow"
+                                >
                                     Tomorrow
                                 </span>
                             )}
                         </div>
-                        <span>{format(date, "EEEE")}</span>
+                        <span class="font-bold text-xl max-sm:text-base">
+                            {format(date, "EEEE")}
+                        </span>
                     </header>
                     <dl class="flex items-start flex-col">
                         {Object.entries(mov).map(([time, movie]) => {
@@ -155,4 +169,3 @@ const endDate = new Date("2023-08-17");
         }
     });
 </script>
-
