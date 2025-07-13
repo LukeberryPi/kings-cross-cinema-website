@@ -52,7 +52,7 @@ const endDate = new Date("2023-08-17");
     </div>
     <button
         id="toggle-past-movies"
-        class="bg-amber-900 text-amber-50 p-2 rounded hover:bg-amber-800 transition-colors"
+        class="bg-stone-900 text-stone-50 px-4 py-2 rounded hover:bg-stone-800 transition-all"
         data-showing="false"
     >
         <span class="toggle-text">Show</span> past dates
@@ -67,53 +67,67 @@ const endDate = new Date("2023-08-17");
             const isToday =
                 new Date(date).setHours(0, 0, 0, 0) ===
                 new Date().setHours(0, 0, 0, 0);
-            const isTomorrow = 
+            const isTomorrow =
                 new Date(date).setHours(0, 0, 0, 0) ===
                 new Date(Date.now() + 24 * 60 * 60 * 1000).setHours(0, 0, 0, 0);
             return (
                 <div
                     class={cn(
-                        "rounded ring ring-amber-800 flex overflow-clip flex-col divide-y divide-amber-800 movie-item",
+                        "rounded ring ring-stone-800 flex overflow-clip flex-col divide-y divide-stone-800 movie-item",
                         alreadyHappened && "opacity-50 past-movie hidden",
                     )}
                     data-is-past={alreadyHappened}
                 >
-                    <div class="p-3 flex items-center justify-between">
+                    <div class="p-2 flex items-center justify-between">
                         <div class="flex items-center gap-4">
-                            <span class="font-bold">
+                            <span class="font-bold text-xl">
                                 {format(date, "do MMMM yyyy")}
                             </span>
                             {!!alreadyHappened && (
-                                <span class=" bg-red-600 text-amber-100 px-2 py-px rounded-full">
-                                    Already Happened
+                                <span class=" bg-red-600 text-stone-100 px-2 py-px rounded-full">
+                                    Already happened
                                 </span>
                             )}
                             {!!isToday && (
-                                <span class=" bg-emerald-600 text-amber-50 px-2 py-px rounded-full">
+                                <span class=" bg-emerald-600 text-stone-50 px-2 py-px rounded-full">
                                     Today
                                 </span>
                             )}
                             {!!isTomorrow && (
-                                <span class=" bg-emerald-600 text-amber-50 px-2 py-px rounded-full">
+                                <span class=" bg-emerald-600 text-stone-50 px-2 py-px rounded-full">
                                     Tomorrow
                                 </span>
                             )}
                         </div>
                         <span>{format(date, "EEEE")}</span>
                     </div>
-                    <div class="flex items-center">
-                        <div class="px-2 text-amber-50 flex flex-col bg-amber-900">
+                    <div class="flex items-start flex-col">
+                        {Object.entries(mov).map(([time, movie]) => {
+                            return (
+                                <div
+                                    class="flex items-center gap-2"
+                                >
+                                    <span class="py-px px-2 font-bold text-stone-50 bg-stone-900">
+                                        {time}
+                                    </span>
+                                    <span class="text-wrap">
+                                        {movie}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                        <!-- <div class="px-2 text-stone-50 flex flex-col bg-stone-900">
                             {Object.keys(mov).map((time) => (
                                 <span>{time}</span>
                             ))}
-                        </div>
-                        <div class="flex flex-col justify-center">
+                        </div> -->
+                        <!-- <div class="flex flex-col justify-center">
                             {Object.values(mov).map((m) => (
-                                <span class="px-2 text-amber-900 bg-amber-50">
+                                <span class="px-2 text-stone-900 bg-stone-50">
                                     {m}
                                 </span>
                             ))}
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             );
