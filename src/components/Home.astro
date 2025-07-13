@@ -26,6 +26,7 @@ const endDate = new Date("2023-08-17");
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 class="lucide lucide-map-pin"
+                aria-hidden="true"
                 ><path
                     d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
                 ></path><circle cx="12" cy="10" r="3"></circle></svg
@@ -34,7 +35,9 @@ const endDate = new Date("2023-08-17");
         <a
             href="https://maps.app.goo.gl/sF3GFctzqArD3nSy7"
             target="_blank"
+            rel="noopener noreferrer"
             class="underline underline-offset-4 text-blue-500 inline-flex items-center"
+            aria-label="Open Granary Square location in Google Maps (opens in new tab)"
             >Open in Google Maps<svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -46,6 +49,7 @@ const endDate = new Date("2023-08-17");
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 class="lucide lucide-arrow-up-right"
+                aria-hidden="true"
                 ><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg
             ></a
         >
@@ -54,6 +58,8 @@ const endDate = new Date("2023-08-17");
         id="toggle-past-movies"
         class="bg-stone-900 text-stone-50 px-4 py-2 rounded hover:bg-stone-800 transition-all"
         data-showing="false"
+        aria-expanded="false"
+        aria-controls="movies-container"
     >
         <span class="toggle-text">Show</span> past dates
     </button>
@@ -71,49 +77,54 @@ const endDate = new Date("2023-08-17");
                 new Date(date).setHours(0, 0, 0, 0) ===
                 new Date(Date.now() + 24 * 60 * 60 * 1000).setHours(0, 0, 0, 0);
             return (
-                <div
+                <article
                     class={cn(
                         "rounded ring ring-stone-800 flex overflow-clip flex-col divide-y divide-stone-800 movie-item",
                         alreadyHappened && "past-movie hidden",
                     )}
                     data-is-past={alreadyHappened}
+                    aria-hidden={alreadyHappened ? "true" : "false"}
                 >
-                    <div class="p-2 flex max-sm:flex-col items-center justify-between max-sm:text-base">
+                    <header class="p-2 flex max-sm:flex-col items-center justify-between max-sm:text-base">
                         <div class="flex items-center gap-4 max-sm:gap-2">
-                            <span class="font-bold text-xl">
-                                {format(date, "do MMMM yyyy")}
-                            </span>
+                            <h2 class="font-bold text-xl">
+                                <time datetime={date}>
+                                    {format(date, "do MMMM yyyy")}
+                                </time>
+                            </h2>
                             {!!alreadyHappened && (
-                                <span class=" bg-red-500 text-stone-100 px-2.5 py-px rounded-full max-sm:text-sm">
+                                <span class=" bg-red-500 text-stone-100 px-2.5 py-px rounded-full max-sm:text-sm" role="status" aria-label="This event has already happened">
                                     Already happened
                                 </span>
                             )}
                             {!!isToday && (
-                                <span class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm">
+                                <span class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm" role="status" aria-label="This event is today">
                                     Today
                                 </span>
                             )}
                             {!!isTomorrow && (
-                                <span class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm">
+                                <span class=" bg-emerald-500 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm" role="status" aria-label="This event is tomorrow">
                                     Tomorrow
                                 </span>
                             )}
                         </div>
                         <span>{format(date, "EEEE")}</span>
-                    </div>
-                    <div class="flex items-start flex-col">
+                    </header>
+                    <dl class="flex items-start flex-col">
                         {Object.entries(mov).map(([time, movie]) => {
                             return (
                                 <div class="flex items-center gap-2">
-                                    <span class="py-2 max-sm:py-4 px-2 font-bold text-stone-50 bg-stone-900 flex-1 flex tabular-nums">
-                                        {time}
-                                    </span>
-                                    <span class="text-wrap pr-2">{movie}</span>
+                                    <dt class="py-2 max-sm:py-4 px-2 font-bold text-stone-50 bg-stone-900 flex-1 flex tabular-nums">
+                                        <time datetime={`${date}T${time}`}>
+                                            {time}
+                                        </time>
+                                    </dt>
+                                    <dd class="text-wrap pr-2">{movie}</dd>
                                 </div>
                             );
                         })}
-                    </div>
-                </div>
+                    </dl>
+                </article>
             );
         })
     }
@@ -130,14 +141,18 @@ const endDate = new Date("2023-08-17");
         pastMovies.forEach((movie) => {
             if (isShowing) {
                 movie.classList.add("hidden");
+                movie.setAttribute("aria-hidden", "true");
             } else {
                 movie.classList.remove("hidden");
+                movie.setAttribute("aria-hidden", "false");
             }
         });
 
         toggleButton.setAttribute("data-showing", JSON.stringify(!isShowing));
+        toggleButton.setAttribute("aria-expanded", JSON.stringify(!isShowing));
         if (toggleText) {
             toggleText.textContent = isShowing ? "Show" : "Hide";
         }
     });
 </script>
+
