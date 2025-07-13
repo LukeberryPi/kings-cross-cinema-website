@@ -8,10 +8,9 @@ const endDate = new Date("2023-08-17");
 ---
 
 <div class="flex flex-col gap-4 items-center">
-    <h1 class="text-3xl font-bold max-sm:text-center">
-        Free movies every day. {format(startDate, "dd MMMM")} - {
-            format(endDate, "dd MMMM")
-        }.
+    <h1 class="text-3xl font-bold text-center">
+        Free movies every day. <br />
+        {format(startDate, "dd MMMM")} - {format(endDate, "dd MMMM")}.
     </h1>
     <div class="gap-4 items-center flex max-sm:flex-col max-sm:gap-1">
         <span class="inline-flex items-center gap-1"
@@ -56,7 +55,7 @@ const endDate = new Date("2023-08-17");
     </div>
     <button
         id="toggle-past-movies"
-        class="bg-stone-900 text-stone-50 px-4 py-2 rounded hover:bg-stone-700 transition-all"
+        class="bg-stone-900 text-stone-50 px-4 py-2 rounded hover:bg-stone-700 transition-all mt-2"
         data-showing="false"
         aria-expanded="false"
         aria-controls="movies-container"
@@ -64,7 +63,10 @@ const endDate = new Date("2023-08-17");
         <span class="toggle-text">Show</span> past dates
     </button>
 </div>
-<div class="flex w-max max-sm:w-auto flex-col gap-8 max-sm:gap-12" id="movies-container">
+<div
+    class="flex w-max max-sm:w-auto flex-col gap-8 max-sm:gap-12"
+    id="movies-container"
+>
     {
         Object.entries(movies).map(([date, mov]) => {
             const alreadyHappened =
@@ -85,9 +87,9 @@ const endDate = new Date("2023-08-17");
                     data-is-past={alreadyHappened}
                     aria-hidden={alreadyHappened ? "true" : "false"}
                 >
-                    <header class="p-2 flex max-sm:flex-col items-center justify-between max-sm:text-base">
+                    <header class="p-2 flex max-sm:flex-col sm:items-center justify-between max-sm:text-base">
                         <div class="flex items-center gap-4 max-sm:gap-2">
-                            <h2 class="font-bold text-xl">
+                            <h2 class="font-bold text-xl max-sm:text-base">
                                 <time datetime={date}>
                                     {format(date, "do MMMM yyyy")}
                                 </time>
@@ -120,7 +122,7 @@ const endDate = new Date("2023-08-17");
                                 </span>
                             )}
                         </div>
-                        <span class="font-bold text-xl max-sm:text-base">
+                        <span class="font-normal text-lg max-sm:text-sm">
                             {format(date, "EEEE")}
                         </span>
                     </header>
