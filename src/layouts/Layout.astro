@@ -19,6 +19,25 @@ import Wrapper from "../components/Wrapper.astro";
     <body>
         <Wrapper>
             <slot />
+            <footer class="flex flex-col items-center text-sm mt-8">
+                This is an unofficial website. Not affiliated with Everyman on
+                the Canal.
+                <span
+                    >Movie schedules are subject to change. Please check the <a
+                        href="https://www.everymancinema.com/everyman-on-the-canal-in-kings-cross/"
+                        class="underline underline-offset-4 text-blue-500"
+                        target="_blank">official source.</a
+                    ></span
+                >
+                <span class="mt-4"
+                    >Made by
+                    <a
+                        href="https://lukeberrypi.com"
+                        class="underline underline-offset-4 text-blue-500"
+                        >Luke Berry</a
+                    ></span
+                >
+            </footer>
         </Wrapper>
     </body>
 </html>
