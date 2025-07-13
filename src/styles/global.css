@@ -2,15 +2,15 @@
 @import "tailwindcss";
 
 @theme {
-    --font-sans: "Manrope", sans-serif;
+  --font-sans: "Manrope", sans-serif;
 }
 
 html {
-    height: 100vw;
+  height: 100vw;
 }
 
 body {
-    height: 100%;
-    background-color: var(--color-stone-50);
-    color: var(--color-stone-900);
+  height: 100%;
+  background-color: var(--color-stone-50);
+  color: var(--color-stone-900);
 }

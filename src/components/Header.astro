@@ -1,13 +1,23 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 ---
 
 <header class="bg-inherit">
     <nav>
-        <a href="/" class="flex items-center gap-2 max-sm:flex-col max-sm:text-center">
-            <Image src="/movie-camera.png" width="80" height="80" alt="Movie Camera Icon" />
+        <a
+            href="/"
+            class="flex items-center gap-2 max-sm:flex-col max-sm:text-center"
+        >
+            <Image
+                src="/movie-camera.png"
+                width="60"
+                height="60"
+                alt="Movie Camera Icon"
+            />
             <div class="flex flex-col">
-                <span class="font-bold text-2xl">King's Cross Cinema Schedule</span>
+                <span class="text-lg font-bold"
+                    >King's Cross Cinema Schedule</span
+                >
                 <span class="text-lg">2025 Everyman on the Canal</span>
             </div>
         </a>
