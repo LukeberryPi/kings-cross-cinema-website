@@ -64,7 +64,7 @@ const endDate = new Date("2023-08-17");
         <span class="toggle-text">Show</span> past dates
     </button>
 </div>
-<div class="flex w-max max-sm:w-auto flex-col gap-8" id="movies-container">
+<div class="flex w-max max-sm:w-auto flex-col gap-8 max-sm:gap-12" id="movies-container">
     {
         Object.entries(movies).map(([date, mov]) => {
             const alreadyHappened =
