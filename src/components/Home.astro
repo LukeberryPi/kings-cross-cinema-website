@@ -69,23 +69,12 @@ const endDate = new Date("2023-08-17");
 >
     {
         Object.entries(movies).map(([date, mov]) => {
-            const alreadyHappened =
-                new Date(date).setHours(0, 0, 0, 0) <
-                new Date().setHours(0, 0, 0, 0);
-            const isToday =
-                new Date(date).setHours(0, 0, 0, 0) ===
-                new Date().setHours(0, 0, 0, 0);
-            const isTomorrow =
-                new Date(date).setHours(0, 0, 0, 0) ===
-                new Date(Date.now() + 24 * 60 * 60 * 1000).setHours(0, 0, 0, 0);
             return (
                 <article
                     class={cn(
                         "rounded ring ring-stone-600 flex overflow-clip flex-col divide-y divide-stone-600 movie-item",
-                        alreadyHappened && "past-movie hidden",
                     )}
-                    data-is-past={alreadyHappened}
-                    aria-hidden={alreadyHappened ? "true" : "false"}
+                    data-date={date}
                 >
                     <header class="p-2 flex max-sm:flex-col sm:items-center justify-between max-sm:text-base">
                         <div class="flex items-center gap-4 max-sm:gap-2">
@@ -94,33 +83,7 @@ const endDate = new Date("2023-08-17");
                                     {format(date, "do MMMM yyyy")}
                                 </time>
                             </h2>
-                            {!!alreadyHappened && (
-                                <span
-                                    class=" bg-red-600 text-stone-100 px-2.5 py-px rounded-full max-sm:text-sm"
-                                    role="status"
-                                    aria-label="This event has already happened"
-                                >
-                                    Already happened
-                                </span>
-                            )}
-                            {!!isToday && (
-                                <span
-                                    class=" bg-emerald-600 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm"
-                                    role="status"
-                                    aria-label="This event is today"
-                                >
-                                    Today
-                                </span>
-                            )}
-                            {!!isTomorrow && (
-                                <span
-                                    class=" bg-emerald-600 text-stone-50 px-2.5 py-px rounded-full max-sm:text-sm"
-                                    role="status"
-                                    aria-label="This event is tomorrow"
-                                >
-                                    Tomorrow
-                                </span>
-                            )}
+                            <span class="status-container"></span>
                         </div>
                         <span class="font-normal text-lg max-sm:text-sm">
                             {format(date, "EEEE")}
@@ -147,27 +110,103 @@ const endDate = new Date("2023-08-17");
 </div>
 
 <script>
-    const toggleButton = document.getElementById("toggle-past-movies");
-    const toggleText = toggleButton?.querySelector(".toggle-text");
-    const pastMovies = document.querySelectorAll(".past-movie");
+    interface MovieItemElement extends HTMLElement {
+        dataset: DOMStringMap & {
+            date?: string;
+            isPast?: string;
+        };
+    }
 
-    toggleButton?.addEventListener("click", () => {
-        const isShowing = toggleButton.getAttribute("data-showing") === "true";
+    type StatusType = 'past' | 'today' | 'tomorrow';
 
-        pastMovies.forEach((movie) => {
-            if (isShowing) {
-                movie.classList.add("hidden");
-                movie.setAttribute("aria-hidden", "true");
-            } else {
-                movie.classList.remove("hidden");
-                movie.setAttribute("aria-hidden", "false");
+    interface StatusBadge {
+        class: string;
+        text: string;
+        ariaLabel: string;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButton = document.getElementById('toggle-past-movies') as HTMLButtonElement | null;
+        const toggleText = toggleButton?.querySelector('.toggle-text') as HTMLSpanElement | null;
+        
+        const movieItems = document.querySelectorAll<MovieItemElement>('[data-date]');
+        const today = new Date().setHours(0, 0, 0, 0);
+        const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).setHours(0, 0, 0, 0);
+
+        const statusBadges: Record<StatusType, StatusBadge> = {
+            past: {
+                class: 'bg-red-600 text-stone-100',
+                text: 'Already happened',
+                ariaLabel: 'This event has already happened'
+            },
+            today: {
+                class: 'bg-emerald-600 text-stone-50',
+                text: 'Today',
+                ariaLabel: 'This event is today'
+            },
+            tomorrow: {
+                class: 'bg-emerald-600 text-stone-50',
+                text: 'Tomorrow',
+                ariaLabel: 'This event is tomorrow'
+            }
+        };
+
+        movieItems.forEach((item) => {
+            const dateStr = item.dataset.date;
+            if (!dateStr) return;
+
+            const itemDate = new Date(dateStr).setHours(0, 0, 0, 0);
+            const statusContainer = item.querySelector('.status-container');
+            
+            if (!statusContainer) return;
+
+            let status: StatusType | null = null;
+
+            if (itemDate < today) {
+                status = 'past';
+                item.classList.add('past-movie', 'hidden');
+                item.setAttribute('aria-hidden', 'true');
+                item.dataset.isPast = 'true';
+            } else if (itemDate === today) {
+                status = 'today';
+            } else if (itemDate === tomorrow) {
+                status = 'tomorrow';
+            }
+
+            if (status) {
+                const badge = statusBadges[status];
+                statusContainer.innerHTML = `
+                    <span 
+                        class="${badge.class} px-2.5 py-px rounded-full max-sm:text-sm" 
+                        role="status" 
+                        aria-label="${badge.ariaLabel}"
+                    >
+                        ${badge.text}
+                    </span>
+                `;
             }
         });
 
-        toggleButton.setAttribute("data-showing", JSON.stringify(!isShowing));
-        toggleButton.setAttribute("aria-expanded", JSON.stringify(!isShowing));
-        if (toggleText) {
-            toggleText.textContent = isShowing ? "Show" : "Hide";
-        }
+        toggleButton?.addEventListener('click', () => {
+            const isShowing = toggleButton.getAttribute('data-showing') === 'true';
+            const pastMovies = document.querySelectorAll<HTMLElement>('.past-movie');
+
+            pastMovies.forEach((movie) => {
+                if (isShowing) {
+                    movie.classList.add('hidden');
+                    movie.setAttribute('aria-hidden', 'true');
+                } else {
+                    movie.classList.remove('hidden');
+                    movie.setAttribute('aria-hidden', 'false');
+                }
+            });
+
+            toggleButton.setAttribute('data-showing', (!isShowing).toString());
+            toggleButton.setAttribute('aria-expanded', (!isShowing).toString());
+            
+            if (toggleText) {
+                toggleText.textContent = isShowing ? 'Show' : 'Hide';
+            }
+        });
     });
 </script>
